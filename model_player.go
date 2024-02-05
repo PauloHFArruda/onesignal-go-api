@@ -23,7 +23,7 @@ type Player struct {
 	InvalidIdentifier *bool `json:"invalid_identifier,omitempty"`
 	AppId *string `json:"app_id,omitempty"`
 	// Required The device's platform:   0 = iOS   1 = Android   2 = Amazon   3 = WindowsPhone (MPNS)   4 = Chrome Apps / Extensions   5 = Chrome Web Push   6 = Windows (WNS)   7 = Safari   8 = Firefox   9 = MacOS   10 = Alexa   11 = Email   13 = For Huawei App Gallery Builds SDK Setup. Not for Huawei Devices using FCM   14 = SMS 
-	DeviceType int32 `json:"device_type"`
+	DeviceType *int32 `json:"device_type,omitempty"`
 	// a custom user ID
 	ExternalUserId NullableString `json:"external_user_id,omitempty"`
 	// Only required if you have enabled Identity Verification and device_type is NOT 11 email.
@@ -81,7 +81,7 @@ type _Player Player
 // will change when the set of required properties is changed
 func NewPlayer(deviceType int32) *Player {
 	this := Player{}
-	this.DeviceType = deviceType
+	this.DeviceType = &deviceType
 	return &this
 }
 
@@ -190,10 +190,9 @@ func (o *Player) SetAppId(v string) {
 }
 
 // GetDeviceType returns the DeviceType field value
-func (o *Player) GetDeviceType() int32 {
+func (o *Player) GetDeviceType() *int32 {
 	if o == nil {
-		var ret int32
-		return ret
+		return nil
 	}
 
 	return o.DeviceType
@@ -205,12 +204,12 @@ func (o *Player) GetDeviceTypeOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.DeviceType, true
+	return o.DeviceType, true
 }
 
 // SetDeviceType sets field value
 func (o *Player) SetDeviceType(v int32) {
-	o.DeviceType = v
+	o.DeviceType = &v
 }
 
 // GetExternalUserId returns the ExternalUserId field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -1051,7 +1050,7 @@ func (o Player) MarshalJSON() ([]byte, error) {
 	if o.AppId != nil {
 		toSerialize["app_id"] = o.AppId
 	}
-	if true {
+	if o.DeviceType != nil {
 		toSerialize["device_type"] = o.DeviceType
 	}
 	if o.ExternalUserId.IsSet() {
